@@ -12,14 +12,15 @@ const routes = express.Router()
 routes.post('/user/register', Auth.register)
 routes.post('/user/login', Auth.login)
 routes.post('/user/send_otp', verifyToken, Auth.sendOtp)
+routes.get('/user/profile', verifyToken, Auth.profile)
 routes.post('/user/verify_otp', verifyToken, Auth.verify_otp)
 routes.post('/user/updateProfile', verifyToken, Auth.updateProfile)
 routes.post('/user/fileUpload', [verifyToken, upload.single("picture")], Auth.fileUpload)
 
 // user transaction routes
 routes.post('/user/find_recipient', verifyToken, Transaction.find_recipient)
-routes.post('/user/transfer', verifyToken ,Transaction.transferMoney)
-routes.post('/user/fetch_transaction', verifyToken ,Transaction.transaction_history)
+routes.post('/user/transfer', verifyToken, Transaction.transferMoney)
+routes.post('/user/fetch_transaction', verifyToken, Transaction.transaction_history)
 
 // Admin Auth Routes
 routes.post('/admin/register', AdminAuth.register)
@@ -37,4 +38,4 @@ routes.get('/admin/fetch_users', verifyToken, Relationship.fetch_users)
 routes.get('/admin/fetch_user/:user_id', verifyToken, Relationship.fetch_user)
 routes.get('/admin/block_user/:user_id', verifyToken, Relationship.block_user)
 
-module.exports={routes}
+module.exports = { routes }
