@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const verifyToken = (req,res,next) => {
     try {
-        let token = req.headers['Authorization'];
+        let token = req.headers['authorization'];
 
         if (!token) {
             return res.status(401).json({ success: false, message:"No token in the request" })
