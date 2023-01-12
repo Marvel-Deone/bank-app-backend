@@ -80,13 +80,11 @@ const verify_otp = async (req, res) => {
 
 const profile = async (req, res) => {
   let id = req.uid
-  try {
-    const info = usersModel.findById(id)
-    res.json({ message: "Fetched Successfully", user: info, success: true })
-  } catch (error) {
-    res.json({ message: "An Error Occurred", success: false })
-    console.log(error);
-  }
+  usersModel.findById(id, (err,result) => {
+    if (!err) return ( res.json({ message: "Fetched Successfully", profile:result ,success: true }));
+
+    return res.json({ message: "An Error Occurred", success: false })
+  })
 }
 
 const login = (req, res) => {
