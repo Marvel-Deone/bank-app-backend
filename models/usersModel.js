@@ -57,7 +57,7 @@ const userSchema = new Schema({
     balance:{
         type: String,
         required: true,
-        default:0
+        default:50000
     },
     account_no:{
         type:String,
