@@ -6,11 +6,11 @@ const Token = require("../../models/tokenSchema");
 require('dotenv').config()
 
 const register = async (req, res) => {
-  let { username, email, password } = req.body;
+  let { first_name, last_name, username, email, password } = req.body;
   const account_no = Math.floor(10000000000 + Math.random() * 90000000000)
-  if (!email || !password || !username || !account_no) return res.status(401).json({ message: "All fields must be filled", success: false })
+  if (!email || !password || !username || !account_no || !first_name || !last_name ) return res.status(401).json({ message: "All fields must be filled", success: false })
 
-  const _userinfo = new usersModel({ username, email, account_no, password })
+  const _userinfo = new usersModel({ username, email, account_no, password, first_name, last_name })
 
   await _userinfo.save().then(resp => {
     res.json({
