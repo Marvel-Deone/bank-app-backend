@@ -19,6 +19,10 @@ const transactionSchema = new Schema ({
         type:String,
         required:true
     },
+    recipient_name: {
+        type:String,
+        required:true
+    },
     amount: {
         type:String,
         required: true

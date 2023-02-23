@@ -30,7 +30,6 @@ const transferMoney = async (req,res) => {
     let reference_no = uuidv4()
     if (!sender_acc_no || !recipient_acc_no || !amount || !note || !recipient_id ) return res.status(401).json({message:"All necessary field must be filled", success:false})
 
-    const _new_transaction = new transactionsModel({reference_no, users_id:[ id,recipient_id ], sender_acc_no, recipient_acc_no, amount, note})
     try {
         // Verify sender
         const sender = await usersModel.findById({_id:id})
@@ -38,12 +37,13 @@ const transferMoney = async (req,res) => {
         if (sender.disabled) return res.status(401).json({message:"Your account has been disabled, You can check your mail to see the reason why your account has been disabled.", success:false})
         if (sender.account_no==recipient_acc_no) return res.status(403).json({message:"You can't fund yourself!", success:false})
         if (Number(sender.amount)<Number(amount)) return res.status(403).json({message:"Not enough money!", success:false})
-
+        
         // verify recipient
         const recipient = await usersModel.findById({_id:recipient_id})
         if (!recipient) return res.status(401).json({message:"recipient not found", success:false})
-
+        
         // Deduction and addition from sender and recipient 
+        const _new_transaction = new transactionsModel({reference_no, users_id:[ id,recipient_id ], sender_acc_no, recipient_acc_no, recipient_name:`${recipient.first_name + recipient.last_name}`,amount, note})
         const set_transaction = await _new_transaction.save()
         const update_sender_amount = await usersModel.updateOne({ _id:id }, { $set: { balance: `${Number(sender.balance)-Number(amount)}` } }, { new: true });
         const update_recipient_amount = await usersModel.updateOne({ _id:recipient_id }, { $set: { balance: `${Number(recipient.balance)+Number(amount)}` } }, { new: true });
