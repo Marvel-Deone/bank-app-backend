@@ -32,8 +32,26 @@ const transferMoney = async (req,res) => {
 
     const _new_transaction = new transactionsModel({reference_no, users_id:[ id,recipient_id ], sender_acc_no, recipient_acc_no, amount, note})
     try {
+        // Verify sender
+        const sender = await usersModel.findById({_id:id})
+        if (!sender) return res.status(401).json({message:"Sender not found", success:false})
+        if (sender.disabled) return res.status(401).json({message:"Your account has been disabled, You can check your mail to see the reason why your account has been disabled.", success:false})
+        if (sender.account_no==recipient_acc_no) return res.status(403).json({message:"You can't fund yourself!", success:false})
+        if (Number(sender.amount)<Number(amount)) return res.status(403).json({message:"Not enough money!", success:false})
+
+        // verify recipient
+        const recipient = await usersModel.findById({_id:recipient_id})
+        if (!recipient) return res.status(401).json({message:"recipient not found", success:false})
+
+        // Deduction and addition from sender and recipient 
         const set_transaction = await _new_transaction.save()
-        res.status(200).json({message:"Transaction successful", transaction:set_transaction, success:true});
+        const update_sender_amount = await usersModel.updateOne({ _id:id }, { $set: { balance: `${Number(sender.balance)-Number(amount)}` } }, { new: true });
+        const update_recipient_amount = await usersModel.updateOne({ _id:recipient_id }, { $set: { balance: `${Number(recipient.balance)+Number(amount)}` } }, { new: true });
+        if (set_transaction&&update_recipient_amount&&update_sender_amount) {
+            return res.status(200).json({message:"Transaction successful", transaction:set_transaction, success:true});
+        } else {
+            return res.status(500).json({message:"Transaction failed", error:"Transaction was not successful ", success:false});
+        }
     } catch (error) {
         res.status(500).json({message:"Sorry, failed to make transaction, try again!", error:error.message,success:false});
     }
