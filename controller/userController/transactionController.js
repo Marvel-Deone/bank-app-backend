@@ -15,7 +15,7 @@ const find_recipient = async (req,res) => {
         try {
             const recipient = await usersModel.findOne({account_no:recipient_acc_no})
             if (!recipient) return res.status(401).json({message:"Recipient not found", success:false})
-            res.status(200).json({recipient_id:recipient._id,recipient_name:`${recipient.first_name}  ${recipient.last_name}`, sender_acc_no:sender.account_no, success:true})
+            res.status(200).json({recipient_id:recipient._id,recipient_name:`${recipient.first_name} ${recipient.last_name}`, sender_acc_no:sender.account_no, success:true})
         } catch (error) {
             res.status(500).json({message:"An error occurred", success:false, error:error.message})
         }
