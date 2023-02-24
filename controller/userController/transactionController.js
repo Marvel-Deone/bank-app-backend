@@ -15,7 +15,7 @@ const find_recipient = async (req,res) => {
         try {
             const recipient = await usersModel.findOne({account_no:recipient_acc_no})
             if (!recipient) return res.status(401).json({message:"Recipient not found", success:false})
-            res.status(200).json({recipient_id:recipient._id,recipient_name:`${recipient.first_name} ${recipient.last_name}`, sender_acc_no:sender.account_no, success:true})
+            res.status(200).json({recipient_id:recipient._id,recipient_name:`${recipient.first_name} + '' + ${recipient.last_name}`, sender_acc_no:sender.account_no, success:true})
         } catch (error) {
             res.status(500).json({message:"An error occurred", success:false, error:error.message})
         }
@@ -43,7 +43,7 @@ const transferMoney = async (req,res) => {
         if (!recipient) return res.status(401).json({message:"recipient not found", success:false})
         
         // Deduction and addition from sender and recipient 
-        const _new_transaction = new transactionsModel({reference_no, users_id:[ id,recipient_id ], sender_acc_no, recipient_acc_no, recipient_name:`${recipient.first_name + '' + recipient.last_name}`,amount, note})
+        const _new_transaction = new transactionsModel({reference_no, users_id:[ id,recipient_id ], sender_acc_no, recipient_acc_no, recipient_name:`${recipient.first_name + recipient.last_name}`,amount, note})
         const set_transaction = await _new_transaction.save()
         const update_sender_amount = await usersModel.updateOne({ _id:id }, { $set: { balance: `${Number(sender.balance)-Number(amount)}` } }, { new: true });
         const update_recipient_amount = await usersModel.updateOne({ _id:recipient_id }, { $set: { balance: `${Number(recipient.balance)+Number(amount)}` } }, { new: true });
