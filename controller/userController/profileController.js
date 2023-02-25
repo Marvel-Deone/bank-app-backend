@@ -44,11 +44,10 @@ const sendOtp = async (req, res) => {
         token: otp,
       }).save();
     }
-    console.log(email, token.token);
     await sendMail({ email, otp: token.token, subject: "Bank-app email verification otp" });
     res.json({ message: "OTP sent to your mail", success: true });
   } catch (error) {
-    res.json({ message: `${email}, ${token.token}, Failed to send otp`, success: false });
+    res.json({ message: `Failed to send otp`, success: false });
   }
 }
 
