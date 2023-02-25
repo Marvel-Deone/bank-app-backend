@@ -117,8 +117,8 @@ const sendMail = async () =>{
 
         const mail_options = {
             from: 'folagbadeolowofela05@gmail.com',
-            to: 'marvelpro788@gmail.com',
-            subject: 'Banka App',
+            to: email,
+            subject,
             text: `Welcome to Bank App Your Verification code is shown below Code`
         }
 
