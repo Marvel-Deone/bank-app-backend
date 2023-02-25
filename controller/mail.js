@@ -102,7 +102,7 @@ const nodemailer = require("nodemailer")
 //     // }
 // }
 
-const sendMail = async () =>{
+const sendMail = async ({email, subject}) =>{
 
     // Mine
     return new Promise((resolve, reject) => {
