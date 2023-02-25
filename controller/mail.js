@@ -119,7 +119,7 @@ const sendMail = async ({email, otp, subject}) =>{
             from: 'folagbadeolowofela05@gmail.com',
             to: email,
             subject,
-            text: `Welcome to Bank App Your Verification code is shown below Code`
+            text: `Welcome to Bank App Your Verification code is shown below Code ${otp}`
         }
 
         transporter.sendMail(mail_options, function(err, info){
