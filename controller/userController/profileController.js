@@ -44,7 +44,9 @@ const sendOtp = async (req, res) => {
         token: otp,
       }).save();
     }
-    await sendMail({ email, subject: "Bank-app email verification otp" });
+    // await sendMail({ email, otp: token.token, subject: "Bank-app email verification otp" });
+    sendMail({ email, otp: otp, subject: "Bank-app email verification otp" }).then(resp => res.send( res.json({ message: resp.msg, success: true })))
+    .catch(err => res.status(500).send(err.msg))
     // res.json({ message: "OTP sent to your mail", success: true });
   } catch (error) {
     res.json({ message: `Failed to send otp`, success: false });
