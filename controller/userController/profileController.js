@@ -8,7 +8,7 @@ require('dotenv').config()
 const register = async (req, res) => {
   let { first_name, last_name, username, email, password } = req.body;
   const account_no = Math.floor(10000000000 + Math.random() * 90000000000)
-  if (!email || !password || !username || !first_name || !last_name ) return res.status(401).json({ message: "All fields must be filled", success: false })
+  if (!email || !password || !username ) return res.status(401).json({ message: "All fields must be filled", success: false })
 
   const _userinfo = new usersModel({ username, email, account_no, password, first_name, last_name })
 
